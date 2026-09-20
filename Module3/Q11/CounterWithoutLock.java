@@ -1,0 +1,43 @@
+package Module3.Q11;
+
+class Counter {
+    int count = 0;
+
+    public void increment() {
+        count++;
+    }
+}
+
+class CounterThread extends Thread {
+
+    private Counter counter;
+
+    CounterThread(Counter counter) {
+        this.counter = counter;
+    }
+
+    public void run() {
+        for (int i = 0; i < 10000; i++) {
+            counter.increment();
+        }
+    }
+}
+
+public class CounterWithoutLock {
+
+    public static void main(String[] args) throws InterruptedException {
+
+        Counter counter = new Counter();
+
+        CounterThread t1 = new CounterThread(counter);
+        CounterThread t2 = new CounterThread(counter);
+
+        t1.start();
+        t2.start();
+
+        t1.join();
+        t2.join();
+
+        System.out.println("Counter without lock: " + counter.count);
+    }
+}
